@@ -42,22 +42,24 @@ class CartPage(BasePage):
         
         try:
             # Attendre que le panier soit chargé
-            self.wait_for_selector(SELECTORS["cart_items"], timeout=TIMEOUTS["page_load"])
+            self.wait_for_selector(SELECTORS["cart_items_available"], timeout=TIMEOUTS["page_load"])
             
             # Sélectionner tous les éléments d'article du panier
-            cart_item_selector = ".cart-item"  # À vérifier selon la structure du site
+            cart_item_selector = SELECTORS["cart-item"]  # À vérifier selon la structure du site
             cart_item_elements = self.page.query_selector_all(cart_item_selector)
             
             cart_items = []
             for element in cart_item_elements:
                 try:
                     # Nom du produit
-                    name_element = element.query_selector(".product-name")  # À vérifier
+                    name_element = [element.query_selector(SELECTORS["cart_item_name"])]
                     name = clean_text(name_element.text_content()) if name_element else "Produit inconnu"
                     
                     # Prix unitaire
-                    price_element = element.query_selector(".product-price")  # À vérifier
-                    price_text = price_element.text_content() if price_element else "0€"
+                    euros_element = element.query_selector(SELECTORS["cart_item_price_detail_euros"])
+                    cents_element = element.query_selector(SELECTORS["cart_item_price_detail_cents"])
+                    if euros_element and cents_element:
+                        price_text = euros_element.text_content() + "," + cents_element.text_content()
                     
                     try:
                         price = parse_price(price_text)
@@ -100,12 +102,13 @@ class CartPage(BasePage):
         
         try:
             # Sélectionner l'élément contenant le total
-            total_element = self.page.query_selector(SELECTORS["cart_total"])
-            if not total_element:
+            total_euros = self.page.query_selector(SELECTORS["cart_total_euros"])
+            total_cents = self.page.query_selector(SELECTORS["cart_total_cents"])
+            if not total_euros:
                 return 0.0
             
             # Extraire le montant total
-            total_text = total_element.text_content()
+            total_text = total_euros.text_content()+ "," + (total_cents.text_content() if total_cents else "0")
             return parse_price(total_text)
             
         except Exception as e:
@@ -124,10 +127,11 @@ class CartPage(BasePage):
             bool: True si la mise à jour a réussi, False sinon
         """
         self.logger.info(f"Mise à jour de la quantité de l'article {item_index} à {new_quantity}")
+        self.wait_for_selector(SELECTORS["cart_items_available"], timeout=TIMEOUTS["page_load"])
         
         try:
             # Sélectionner tous les éléments d'article du panier
-            cart_item_selector = ".cart-item"  # À vérifier
+            cart_item_selector = SELECTORS["cart-item"]  # À vérifier selon la structure du site
             cart_item_elements = self.page.query_selector_all(cart_item_selector)
             
             if item_index >= len(cart_item_elements):
@@ -135,7 +139,7 @@ class CartPage(BasePage):
                 return False
             
             # Sélectionner l'élément de quantité de l'article
-            quantity_element = cart_item_elements[item_index].query_selector(SELECTORS["quantity_input"])
+            quantity_element = cart_item_elements[item_index].query_selector(SELECTORS["item_quantity"])
             if not quantity_element:
                 self.logger.error("Élément de quantité non trouvé")
                 return False
@@ -150,13 +154,13 @@ class CartPage(BasePage):
             # Sinon, mettre à jour la quantité
             if new_quantity > current_quantity:
                 # Augmenter la quantité
-                add_button = cart_item_elements[item_index].query_selector(SELECTORS["add_remove_item"] + ".add")  # À vérifier
+                add_button = self.page.query_selector_all(SELECTORS["change_quantity_item"])[1]  # À vérifier
                 for _ in range(new_quantity - current_quantity):
                     add_button.click()
                     wait_random_time(0.5, 1.0)
             else:
                 # Diminuer la quantité
-                remove_button = cart_item_elements[item_index].query_selector(SELECTORS["add_remove_item"] + ".remove")  # À vérifier
+                remove_button = self.page.query_selector_all(SELECTORS["change_quantity_item"])[0]  # À vérifier
                 for _ in range(current_quantity - new_quantity):
                     remove_button.click()
                     wait_random_time(0.5, 1.0)

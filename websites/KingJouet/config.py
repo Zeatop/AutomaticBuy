@@ -30,7 +30,7 @@ SELECTORS = {
     "sort_dropdown": "#orderBySelect",
     
     # Page produit
-    "product_title": ".product-name h1",
+    "product_title": "h1 span",
     "product_price_detail_euros": ".prix.text-2xl.lg:text-4xl.font-bold.text-[#dd1e35]",
     "product_price_detail_cents": ".cents",
     "add_to_cart_preco_button": "#addToCartPrecoBtn",
@@ -42,11 +42,14 @@ SELECTORS = {
     "cart_items_available": ".relative divide-y", # Le premier sont les produits disponibles
     "cart_items_preco": ".relative divide-y", # Le deuxième sont les produits en précommande
     "cart_item": ".panier-article-row border-b",
+    "cart_item_name": ".block font-medium",
+    "cart_item_price_detail_euros": ".pfont-semibold.ml-2.text-lg.md:text-xl",
+    "cart_item_price_detail_cents": ".cents",
     # On ne peut modifier et voir la quantité que dans le panier
-    "quantity_input": ".px-2",
-    "remove_item": "btn btn-circle p-4 bg-neutral-200 border-none font-semibold btn-process", # Le premier sert à remove un item
-    "add_remove_item": "btn btn-circle p-4 bg-neutral-200 border-none font-semibold btn-process", # Le second sert à ajouter un item
-    "cart_total": ".attribut-value.text-right.block.font-bold.text-lg.md:text-xl",
+    "item_quantity": ".px-2",
+    "change_quantity_item": "btn btn-circle p-4 bg-neutral-200 border-none font-semibold btn-process", # Le premier sert à remove un item
+    "cart_total_euros": ".attribut-value.text-right.block.font-bold.text-lg.md:text-xl",
+    "cart_total_cents": ".cents",
     "proceed_to_checkout": "#btn_confirmation_pc",
     # Impossible de vider le panier en un clic
     "empty_cart": ".text-sm.underline.cursor-pointer",
