@@ -27,7 +27,7 @@ SELECTORS = {
     "product_price_euros": ".font-bold.text-xl.md:text-2xl.text-[#dd1e35]",
     "product_price_cents": ".cents",
     "product_availability": ".dispo.text-xs.text-kj-green.text-dispo.hover:text-zinc-400",
-    "sort_dropdown": "#tri",
+    "sort_dropdown": "#orderBySelect",
     
     # Page produit
     "product_title": ".product-name h1",
