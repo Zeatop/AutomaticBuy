@@ -69,13 +69,8 @@ automation_achats/
 
 ## Installation
 
-1. Cloner ce dépôt :
-```bash
-git clone https://github.com/votre-username/automation-achats.git
-cd automation-achats
-```
 
-2. Créer et activer un environnement virtuel :
+1. Créer et activer un environnement virtuel :
 ```bash
 python -m venv env
 source env/bin/activate  # Sous Linux/Mac
@@ -83,12 +78,12 @@ source env/bin/activate  # Sous Linux/Mac
 env\Scripts\activate     # Sous Windows
 ```
 
-3. Installer les dépendances :
+2. Installer les dépendances :
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Configurer les variables d'environnement :
+3. Configurer les variables d'environnement :
 Créer un fichier `.env` à la racine du projet avec le contenu suivant :
 ```
 SENTRY_DSN=votre_dsn_sentry
