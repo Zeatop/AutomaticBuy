@@ -128,8 +128,8 @@ class CartPage(BasePage):
         """
         self.logger.info(f"Mise à jour de la quantité de l'article {item_index} à {new_quantity}")
         self.wait_for_selector(SELECTORS["cart_items_available"], timeout=TIMEOUTS["page_load"])
-        add_button = self.page.query_selector(SELECTORS["change_quantity_item"])[1]
-        remove_button = self.page.query_selector(SELECTORS["change_quantity_item"])[0]
+        add_button = self.page.query_selector_all(SELECTORS["change_quantity_item"])[1]
+        remove_button = self.page.query_selector_all(SELECTORS["change_quantity_item"])[0]
         
         try:
             # Sélectionner tous les éléments d'article du panier
@@ -171,7 +171,7 @@ class CartPage(BasePage):
             self.wait_for_navigation(timeout=TIMEOUTS["add_to_cart"])
             
             # Vérifier si la mise à jour a réussi
-            updated_quantity_element = cart_item_elements[item_index].query_selector(SELECTORS["quantity_input"])
+            updated_quantity_element = cart_item_elements[item_index].query_selector(SELECTORS["item_quantity"])
             updated_quantity = int(updated_quantity_element.get_attribute("value") or "1") if updated_quantity_element else 0
             
             return updated_quantity == new_quantity
