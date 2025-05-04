@@ -45,14 +45,14 @@ class CartPage(BasePage):
             self.wait_for_selector(SELECTORS["cart_items_available"], timeout=TIMEOUTS["page_load"])
             
             # Sélectionner tous les éléments d'article du panier
-            cart_item_selector = SELECTORS["cart-item"]  # À vérifier selon la structure du site
+            cart_item_selector = SELECTORS["cart_item"]  # À vérifier selon la structure du site
             cart_item_elements = self.page.query_selector_all(cart_item_selector)
             
             cart_items = []
             for element in cart_item_elements:
                 try:
                     # Nom du produit
-                    name_element = [element.query_selector(SELECTORS["cart_item_name"])]
+                    name_element = element.query_selector(SELECTORS["cart_item_name"])
                     name = clean_text(name_element.text_content()) if name_element else "Produit inconnu"
                     
                     # Prix unitaire
@@ -67,7 +67,7 @@ class CartPage(BasePage):
                         price = 0.0
                     
                     # Quantité
-                    quantity_element = element.query_selector(SELECTORS["quantity_input"])
+                    quantity_element = element.query_selector(SELECTORS["item_quantity"])
                     quantity = int(quantity_element.get_attribute("value") or "1") if quantity_element else 1
                     
                     # Prix total
@@ -128,10 +128,12 @@ class CartPage(BasePage):
         """
         self.logger.info(f"Mise à jour de la quantité de l'article {item_index} à {new_quantity}")
         self.wait_for_selector(SELECTORS["cart_items_available"], timeout=TIMEOUTS["page_load"])
+        add_button = self.page.query_selector(SELECTORS["change_quantity_item"])[1]
+        remove_button = self.page.query_selector(SELECTORS["change_quantity_item"])[0]
         
         try:
             # Sélectionner tous les éléments d'article du panier
-            cart_item_selector = SELECTORS["cart-item"]  # À vérifier selon la structure du site
+            cart_item_selector = SELECTORS["cart_item"]  # À vérifier selon la structure du site
             cart_item_elements = self.page.query_selector_all(cart_item_selector)
             
             if item_index >= len(cart_item_elements):
@@ -154,13 +156,13 @@ class CartPage(BasePage):
             # Sinon, mettre à jour la quantité
             if new_quantity > current_quantity:
                 # Augmenter la quantité
-                add_button = self.page.query_selector_all(SELECTORS["change_quantity_item"])[1]  # À vérifier
+                add_button = self.page.query_selector_all(add_button)
                 for _ in range(new_quantity - current_quantity):
                     add_button.click()
                     wait_random_time(0.5, 1.0)
             else:
                 # Diminuer la quantité
-                remove_button = self.page.query_selector_all(SELECTORS["change_quantity_item"])[0]  # À vérifier
+                remove_button = self.page.query_selector_all(remove_button)
                 for _ in range(current_quantity - new_quantity):
                     remove_button.click()
                     wait_random_time(0.5, 1.0)
