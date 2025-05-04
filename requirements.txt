@@ -1,0 +1,6 @@
+playwright==1.40.0
+pytest-playwright==0.4.0
+python-dotenv==1.0.0
+sentry-sdk==1.32.0
+pytest==7.4.3
+pydantic==2.4.2
