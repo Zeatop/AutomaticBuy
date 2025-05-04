@@ -41,7 +41,7 @@ SELECTORS = {
     # On pourrait ne regarder que les cart_item plutôt que de s'embêter à séparer les préco et non préco
     "cart_items_available": ".relative divide-y", # Le premier sont les produits disponibles
     "cart_items_preco": ".relative divide-y", # Le deuxième sont les produits en précommande
-    "cart_item": "panier-article-row border-b",
+    "cart_item": ".panier-article-row border-b",
     # On ne peut modifier et voir la quantité que dans le panier
     "quantity_input": ".px-2",
     "remove_item": "btn btn-circle p-4 bg-neutral-200 border-none font-semibold btn-process", # Le premier sert à remove un item
